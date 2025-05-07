@@ -1,97 +1,151 @@
----
-title: Start developing
-description: Make your first change to an Expo project and see it live on your device.
-hideTOC: true
----
+npx react-native init IMSportsApp
+cd IMSportsApp
+npm install react-native-webview
+react-native link react-native-webview
+import React from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
 
-import { ProjectStructure } from '~/scenes/get-started/start-developing/ProjectStructure';
-import { TemplateFeatures } from '~/scenes/get-started/start-developing/TemplateFeatures';
-import { Collapsible } from '~/ui/components/Collapsible';
-import { ContentSpotlight } from '~/ui/components/ContentSpotlight';
-import { Terminal, DiffBlock } from '~/ui/components/Snippet';
-import { Step } from '~/ui/components/Step';
+const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IM'Sports</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
 
-<Step label="1">
-## Start a development server
-To start the development server, run the following command:
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
 
-<Terminal cmd={['$ npx expo start']} />
+    .button {
+      width: 100%;
+      max-width: 300px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 1.2rem;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-</Step>
+    .button:hover {
+      background-color: #0056b3;
+    }
 
-<Step label="2">
-## Open the app on your device
+    .camera-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
 
-After running the command above, you will see a QR code in your terminal. Scan this QR code to open the app on your device.
+    .camera-button {
+      flex: 1 1 45%;
+      padding: 10px;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #28a745;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-If you're using an Android Emulator or iOS Simulator, you can press <kbd>a</kbd> or <kbd>i</kbd> respectively to open the app.
+    .camera-button:hover {
+      background-color: #1e7e34;
+    }
 
-<Collapsible summary="Having problems?">
+    @media (max-width: 600px) {
+      .button {
+        font-size: 1rem;
+        padding: 12px;
+      }
 
-Make sure you are on the same Wi-Fi network on your computer and your device.
+      .camera-button {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>IM'Sports</h1>
 
-If it still doesn't work, it may be due to the router configuration &mdash; this is common for public networks. You can work around this by choosing the **Tunnel** connection type when starting the development server, then scanning the QR code again.
+  <button class="button" onclick="toggleRecording()">Start Recording</button>
+  <button class="button" onclick="toggleMainCamera()">Main Camera: On</button>
 
-<Terminal cmd={['$ npx expo start --tunnel']} />
+  <div class="camera-buttons">
+    <button class="camera-button" onclick="switchCamera('Camera 1')">Camera 1</button>
+    <button class="camera-button" onclick="switchCamera('Camera 2')">Camera 2</button>
+    <button class="camera-button" onclick="switchCamera('Camera 3')">Camera 3</button>
+    <button class="camera-button" onclick="switchCamera('Camera 4')">Camera 4</button>
+  </div>
 
-> Using the **Tunnel** connection type will make the app reloads considerably slower than on **LAN** or **Local**, so it's best to avoid tunnel when possible. You may want to install and use an emulator or simulator to speed up development if **Tunnel** is required to access your machine from another device on your network.
+  <script>
+    let isRecording = false;
+    let isMainCameraOn = true;
 
-</Collapsible>
+    function toggleRecording() {
+      isRecording = !isRecording;
+      const recordingButton = document.querySelectorAll('.button')[0];
+      recordingButton.textContent = isRecording ? 'Stop Recording' : 'Start Recording';
+      // Add logic to start/stop recording
+    }
 
-</Step>
+    function toggleMainCamera() {
+      isMainCameraOn = !isMainCameraOn;
+      const mainCameraButton = document.querySelectorAll('.button')[1];
+      mainCameraButton.textContent = isMainCameraOn ? 'Main Camera: On' : 'Main Camera: Off';
+      // Add logic to enable/disable main camera
+    }
 
-<Step label="3">
+    function switchCamera(cameraName) {
+      // Add logic to switch to the selected camera
+      alert('Switched to ' + cameraName);
+    }
+  </script>
+</body>
+</html>
+`;
 
-## Make your first change
+const App = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <WebView
+        originWhitelist={['*']}
+        source={{ html: htmlContent }}
+        style={styles.webview}
+      />
+    </SafeAreaView>
+  );
+};
 
-Open the **app/(tabs)/index.tsx** file in your code editor and make a change.
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  webview: {
+    flex: 1,
+  },
+});
 
-<DiffBlock
-  raw={`diff --git a/app/(tabs)/index.tsx b/app/(tabs)/index.tsx
-index 45cfa0e..4d1b384 100644
---- a/app/(tabs)/index.tsx
-+++ b/app/(tabs)/index.tsx
-@@ -17,7 +17,7 @@ export default function HomeScreen() {
-       }
-     >
-       <ThemedView style={styles.titleContainer}>
--        <ThemedText type="title">Welcome!</ThemedText>
-+        <ThemedText type="title">Hello World!</ThemedText>
-         <HelloWave />
-       </ThemedView>
-       <ThemedView style={styles.stepContainer}>
-  `}
-/>
-
-<Collapsible summary="Changes not showing up on your device?">
-
-Expo Go is configured by default to automatically reload the app whenever a file is changed, but let's make sure to go over the steps to enable it in case somehow things aren't working.
-
-- Make sure you have the [development mode enabled in Expo CLI](/workflow/development-mode#development-mode).
-- Close the Expo app and reopen it.
-- Once the app is open again, shake your device to reveal the developer menu. If you are using an emulator, press <kbd>Ctrl</kbd> + <kbd>M</kbd> for Android or <kbd>Cmd ⌘</kbd> + <kbd>D</kbd> for iOS.
-- If you see **Enable Fast Refresh**, press it. If you see **Disable Fast Refresh**, dismiss the developer menu. Now try making another change.
-
-  <ContentSpotlight
-    alt="Developer menu in Expo Go app."
-    src="/static/images/get-started/developer-menu.png"
-    className="max-w-[540px]"
-  />
-
-</Collapsible>
-
-</Step>
-
----
-
-## File structure
-
-Below, you can get familiar with the default project's file structure:
-
-<ProjectStructure />
-
-## Features
-
-The default project template has the following features:
-
-<TemplateFeatures />
+export default App;
+npx react-native run-android
+# or
+npx react-native run-ios
