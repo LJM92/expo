@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Fix web url from updating during initial load with nested navigators ([#36690](https://github.com/expo/expo/pull/36690) by [@marklawlor](https://github.com/marklawlor))
+
 ### 💡 Others
 
 ## 5.0.6 — 2025-05-06
